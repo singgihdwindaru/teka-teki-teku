@@ -1,3 +1,4 @@
+import 'package:cross_word/cross_word.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teka_teki_tiku/counter/counter.dart';
@@ -23,7 +24,29 @@ class CounterView extends StatelessWidget {
     final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.counterAppBarTitle)),
-      body: const Center(child: CounterText()),
+      body: SingleChildScrollView(
+        child: CrosswordWidget(
+          words: const [
+            {
+              'answer': 'indonesia',
+              'description': 'indonesia',
+            },
+            {
+              'answer': 'india',
+              'description': 'india',
+            },
+            {
+              'answer': 'irak',
+              'description': 'irak',
+            },
+            {
+              'answer': 'malaysia',
+              'description': 'malaysia',
+            },
+          ],
+          onRevealCurrentCellLetter: (_) {},
+        ),
+      ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
