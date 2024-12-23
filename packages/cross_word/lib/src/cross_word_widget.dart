@@ -261,6 +261,7 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
                       width: 30,
                       height: 30,
                       margin: EdgeInsets.all(1),
+                      color: Colors.black,
                     );
                   } else {
                     return GestureDetector(
