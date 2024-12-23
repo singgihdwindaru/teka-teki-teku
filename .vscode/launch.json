@@ -5,49 +5,68 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "teka-teki-teku",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "kakiku_admin",
-            "cwd": "apps/kakiku_admin",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "kakiku_admin (profile mode)",
-            "cwd": "apps/kakiku_admin",
+            "name": "teka-teki-teku Development",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "program": "apps/teka_teki_tiku/lib/main_development.dart",
+            "args": [
+                "--flavor",
+                "development",
+                "--target",
+                "lib/main_development.dart"
+            ]
         },
         {
-            "name": "kakiku_admin (release mode)",
-            "cwd": "apps/kakiku_admin",
+            "name": "teka-teki-teku staging",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "program": "apps/teka_teki_tiku/lib/main_staging.dart",
+            "args": ["--flavor", "staging", "--target", "apps/teka_teki_tiku/lib/main_staging.dart"]
         },
         {
-            "name": "teka_teki_tiku",
-            "cwd": "apps/teka_teki_tiku",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "teka_teki_tiku (profile mode)",
-            "cwd": "apps/teka_teki_tiku",
+            "name": "teka-teki-teku production",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "program": "apps/teka_teki_tiku/lib/main_production.dart",
+            "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
         },
         {
-            "name": "teka_teki_tiku (release mode)",
-            "cwd": "apps/teka_teki_tiku",
+            "name": "kakiku_admin development",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "program": "lib/main_development.dart",
+            "args": [
+              "--flavor",
+              "development",
+              "--target",
+              "lib/main_development.dart"
+            ]
+        },
+        {
+            "name": "kakiku_admin staging",
+            "request": "launch",
+            "type": "dart",
+            "program": "apps/kakiku_admin/lib/main_staging.dart",
+            "args": ["--flavor", "staging", "--target", "lib/main_staging.dart"]
+          },
+          {
+            "name": "kakiku_admin production",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_production.dart",
+            "args": ["--flavor", "production", "--target", "lib/main_production.dart"]
+          },
+          {
+            "name": "cross-word",
+            "request": "launch",
+            "type": "dart",
+            "program": "packages/cross_word/lib/src/main.dart",
+            "args": [
+                "--flavor",
+                "development",
+                "--target",
+                "lib/src/main.dart"
+            ]
         }
     ]
 }
