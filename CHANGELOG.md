@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-24
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cross_word` - `v0.1.1+2`](#cross_word---v0112)
+ - [`teka_teki_tiku` - `v1.2.2`](#teka_teki_tiku---v122)
+
+---
+
+#### `cross_word` - `v0.1.1+2`
+
+ - **FIX**: improve performance of the crossword generator.
+
+#### `teka_teki_tiku` - `v1.2.2`
+
+ - **FIX**: add zoom and increase words.
+
+
 ## 2024-12-23
 
 ### Changes

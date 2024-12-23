@@ -1,3 +1,7 @@
+## 1.2.2
+
+ - **FIX**: add zoom and increase words.
+
 ## 1.2.1
 
  - Update a dependency to the latest release.
