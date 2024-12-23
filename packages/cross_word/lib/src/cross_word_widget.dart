@@ -1,5 +1,4 @@
 import 'package:cross_word/cross_word.dart';
-import 'package:cross_word/src/cross_word_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -268,34 +267,33 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
                       onTap: () {
                         _onCellTap(rowIndex, colIndex);
                       },
-                      child: widget.style.cellBuilder != null
-                          ? widget.style.cellBuilder!(
-                              context,
-                              cell,
-                              isSelected,
-                              isHighlighted,
-                              isCompletedCell,
-                            )
-                          : Container(
-                              width: 30,
-                              height: 30,
-                              alignment: Alignment.center,
-                              margin: EdgeInsets.all(1),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                color: isCompletedCell
-                                    ? widget.style.wordCompleteColor
-                                    : isSelected
-                                        ? widget.style.currentCellColor
-                                        : isHighlighted
-                                            ? widget.style.wordHighlightColor
-                                            : Colors.white,
-                              ),
-                              child: Text(
-                                cell.toUpperCase(),
-                                style: widget.style.cellTextStyle,
-                              ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.all(1),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: isCompletedCell
+                                  ? widget.style.wordCompleteColor
+                                  : isSelected
+                                      ? widget.style.currentCellColor
+                                      : isHighlighted
+                                          ? widget.style.wordHighlightColor
+                                          : Colors.white,
                             ),
+                            child: Text(
+                              cell.toUpperCase(),
+                              style: widget.style.cellTextStyle,
+                            ),
+                          ),
+                          isFirstLetter(rowIndex, colIndex)
+                              ? Positioned(top: 2, left: 2, child: Text(questionNumber(rowIndex, colIndex), style: TextStyle(fontSize: 4, color: Colors.black)))
+                              : Container(),
+                        ],
+                      ),
                     );
                   }
                 }).toList(),
@@ -305,6 +303,25 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
         ),
       ),
     );
+  }
+
+  bool isFirstLetter(int row, int col) {
+    for (var word in _words) {
+      if (word['orientation'] == 'across') {
+        int startY = word['starty'] - 1;
+        int startX = word['startx'] - 1;
+        if (startY == row && startX == col && startX + word['answer'].length > col) {
+          return true;
+        }
+      } else if (word['orientation'] == 'down') {
+        int startY = word['starty'] - 1;
+        int startX = word['startx'] - 1;
+        if (startX == col && startY == row && startY + word['answer'].length > row) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   void _validateWord() {
@@ -376,6 +393,53 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
       }
     }
     return false;
+  }
+
+  String questionNumber(int row, int col) {
+    for (var word in _words) {
+      if (word['starty'] - 1 == row && word['startx'] - 1 == col) {
+        return word['number'].toString();
+      }
+    }
+    return '';
+  }
+
+  String questionNumberLine(int row, int col) {
+    for (var word in _words) {
+      if (word['orientation'] == 'across') {
+        int startY = word['starty'] - 1;
+        int startX = word['startx'] - 1;
+        if (startY == row && startX <= col && startX + word['answer'].length > col) {
+          return word['number'].toString();
+        }
+      } else if (word['orientation'] == 'down') {
+        int startY = word['starty'] - 1;
+        int startX = word['startx'] - 1;
+        if (startX == col && startY <= row && startY + word['answer'].length > row) {
+          return word['number'].toString();
+        }
+      }
+    }
+    return '';
+  }
+
+  String getAlignment(int row, int col) {
+    for (var word in _words) {
+      if (word['orientation'] == 'across') {
+        int startY = word['starty'] - 1;
+        int startX = word['startx'] - 1;
+        if (startY == row && startX <= col && startX + word['answer'].length > col) {
+          return 'mendatar';
+        }
+      } else if (word['orientation'] == 'down') {
+        int startY = word['starty'] - 1;
+        int startX = word['startx'] - 1;
+        if (startX == col && startY <= row && startY + word['answer'].length > row) {
+          return 'menurun';
+        }
+      }
+    }
+    return '';
   }
 
   int _currentWordIndex = -1;
@@ -505,6 +569,15 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
       }
     }
     return 0;
+  }
+
+  String? _getQuestionNumberForCell(int row, int col) {
+    for (var word in _words) {
+      if (word['starty'] - 1 == row && word['startx'] - 1 == col) {
+        return word['number'].toString();
+      }
+    }
+    return null;
   }
 
   bool _isWordComplete() {
@@ -690,7 +763,7 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Description:',
+                            '${questionNumberLine(_selectedRow, _selectedCol)} ${getAlignment(_selectedRow, _selectedCol)}',
                             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                           ),
                           Text(

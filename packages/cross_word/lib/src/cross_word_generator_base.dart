@@ -6,17 +6,13 @@ class CrosswordGenerator {
     return (x1 - x2).abs() + (y1 - y2).abs();
   }
 
-  double weightedAverage(List<double> weights, List<double> values) {
-    double temp = 0;
+  double weightedAverage(List<double> weights, List<double> values, List<List<String>> table) {
+    double penalty = computeEmptyPenalty(table);
+    double score = 0;
     for (int k = 0; k < weights.length; k++) {
-      temp += weights[k] * values[k];
+      score += weights[k] * values[k];
     }
-
-    if (temp < 0 || temp > 1) {
-      print("Error: $values");
-    }
-
-    return temp;
+    return score - penalty; // Kurangi penalti
   }
 
   // Component scores
@@ -27,7 +23,9 @@ class CrosswordGenerator {
 
   // 2. Distance from center
   double computeScore2(int rows, int cols, int i, int j) {
-    return 1 - (distance(rows ~/ 2, cols ~/ 2, i, j) / ((rows / 2) + (cols / 2)));
+    // Tambahkan bobot untuk jarak dari pojok
+    double cornerWeight = 0.5 * ((rows - i).abs() + (cols - j).abs()) / ((rows + cols) / 2);
+    return (1 - (distance(rows ~/ 2, cols ~/ 2, i, j) / ((rows / 2) + (cols / 2)))) + cornerWeight;
   }
 
   // 3. Vertical versus horizontal orientation
@@ -97,14 +95,13 @@ class CrosswordGenerator {
   }
 
   int computeDimension(List<Map<String, dynamic>> words, int factor) {
-    int temp = 0;
-    for (int i = 0; i < words.length; i++) {
-      if (temp < words[i]['answer'].length) {
-        temp = words[i]['answer'].length;
-      }
-    }
+    int maxWordLength = words.map((w) => (w['answer'] as String).length).reduce(max);
+    return maxWordLength * (factor - 1); // Kurangi faktor untuk memaksa tabel lebih kecil
+  }
 
-    return temp * factor;
+  double computeEmptyPenalty(List<List<String>> table) {
+    int emptyCount = table.expand((row) => row).where((cell) => cell == "-").length;
+    return emptyCount / (table.length * table[0].length);
   }
 
   // Table functions
@@ -129,49 +126,44 @@ class CrosswordGenerator {
     }
   }
 
+  Map<String, Map<int, Map<int, double>>> _scoreCache = {};
+
   List<dynamic> attemptToInsert(int rows, int cols, List<List<String>> table, List<double> weights, int verticalCount, int totalCount, String word, int index) {
+    if (!_scoreCache.containsKey(word)) {
+      _scoreCache[word] = {};
+    }
     int bestI = 0;
     int bestJ = 0;
     int bestO = 0;
     double bestScore = -1;
 
-    // Horizontal
+    // Evaluasi horizontal
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols - word.length + 1; j++) {
         bool isValid = true;
         int connections = 0;
-        bool prevFlag = false;
 
         for (int k = 0; k < word.length; k++) {
           if (isConflict(table, false, word[k], i, j + k)) {
             isValid = false;
             break;
-          } else if (table[i][j + k] == "-") {
-            prevFlag = false;
-          } else {
-            if (prevFlag) {
-              isValid = false;
-              break;
-            } else {
-              prevFlag = true;
-              connections += 1;
-            }
+          } else if (table[i][j + k] != "-") {
+            connections++;
           }
         }
 
-        if ((j - 1) >= 0 && table[i][j - 1] != "-") {
-          isValid = false;
-        } else if ((j + word.length) < table[i].length && table[i][j + word.length] != "-") {
+        // Pastikan tidak ada kata tumpang tindih di ujung kata
+        if ((j - 1 >= 0 && table[i][j - 1] != "-") || (j + word.length < cols && table[i][j + word.length] != "-")) {
           isValid = false;
         }
 
         if (isValid) {
           double tempScore1 = computeScore1(connections, word);
-          double tempScore2 = computeScore2(rows, cols, i, j + (word.length ~/ 2));
+          double tempScore2 = computeScore2(rows, cols, i, j + word.length ~/ 2);
           double tempScore3 = computeScore3(1, 0, verticalCount, totalCount);
           double tempScore4 = computeScore4(rows, word);
-          double tempScore = weightedAverage(weights, [tempScore1, tempScore2, tempScore3, tempScore4]);
-
+          double tempScore = weightedAverage(weights, [tempScore1, tempScore2, tempScore3, tempScore4], table);
+          _scoreCache[word]?[i]?[j] = tempScore;
           if (tempScore > bestScore) {
             bestScore = tempScore;
             bestI = i;
@@ -182,42 +174,32 @@ class CrosswordGenerator {
       }
     }
 
-    // Vertical
+    // Evaluasi vertikal
     for (int i = 0; i < rows - word.length + 1; i++) {
       for (int j = 0; j < cols; j++) {
         bool isValid = true;
         int connections = 0;
-        bool prevFlag = false;
 
         for (int k = 0; k < word.length; k++) {
           if (isConflict(table, true, word[k], i + k, j)) {
             isValid = false;
             break;
-          } else if (table[i + k][j] == "-") {
-            prevFlag = false;
-          } else {
-            if (prevFlag) {
-              isValid = false;
-              break;
-            } else {
-              prevFlag = true;
-              connections += 1;
-            }
+          } else if (table[i + k][j] != "-") {
+            connections++;
           }
         }
 
-        if ((i - 1) >= 0 && table[i - 1][j] != "-") {
-          isValid = false;
-        } else if ((i + word.length) < table.length && table[i + word.length][j] != "-") {
+        // Pastikan tidak ada kata tumpang tindih di ujung kata
+        if ((i - 1 >= 0 && table[i - 1][j] != "-") || (i + word.length < rows && table[i + word.length][j] != "-")) {
           isValid = false;
         }
 
         if (isValid) {
           double tempScore1 = computeScore1(connections, word);
-          double tempScore2 = computeScore2(rows, cols, i + (word.length ~/ 2), j);
+          double tempScore2 = computeScore2(rows, cols, i + word.length ~/ 2, j);
           double tempScore3 = computeScore3(0, 1, verticalCount, totalCount);
           double tempScore4 = computeScore4(rows, word);
-          double tempScore = weightedAverage(weights, [tempScore1, tempScore2, tempScore3, tempScore4]);
+          double tempScore = weightedAverage(weights, [tempScore1, tempScore2, tempScore3, tempScore4], table);
 
           if (tempScore > bestScore) {
             bestScore = tempScore;
@@ -231,50 +213,208 @@ class CrosswordGenerator {
 
     if (bestScore > -1) {
       return [bestScore, word, index, bestI, bestJ, bestO];
-    } else {
-      // Allow placement even if no connections
-      for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols - word.length + 1; j++) {
-          bool isValid = true;
-          for (int k = 0; k < word.length; k++) {
-            if (isConflict(table, false, word[k], i, j + k)) {
-              isValid = false;
-              break;
-            }
-          }
-          if (isValid) {
-            return [0, word, index, i, j, 0];
-          }
-        }
-      }
-
-      for (int i = 0; i < rows - word.length + 1; i++) {
-        for (int j = 0; j < cols; j++) {
-          bool isValid = true;
-          for (int k = 0; k < word.length; k++) {
-            if (isConflict(table, true, word[k], i + k, j)) {
-              isValid = false;
-              break;
-            }
-          }
-          if (isValid) {
-            return [0, word, index, i, j, 1];
-          }
-        }
-      }
-
-      return [-1];
     }
+    return [-1];
   }
+
+  // List<dynamic> attemptToInsert(int rows, int cols, List<List<String>> table, List<double> weights, int verticalCount, int totalCount, String word, int index) {
+  //   int bestI = 0;
+  //   int bestJ = 0;
+  //   int bestO = 0;
+  //   double bestScore = -1;
+
+  //   // Horizontal
+  //   for (int i = 0; i < rows; i++) {
+  //     for (int j = 0; j < cols - word.length + 1; j++) {
+  //       bool isValid = true;
+  //       int connections = 0;
+  //       bool prevFlag = false;
+
+  //       for (int k = 0; k < word.length; k++) {
+  //         if (isConflict(table, false, word[k], i, j + k)) {
+  //           isValid = false;
+  //           break;
+  //         } else if (table[i][j + k] == "-") {
+  //           prevFlag = false;
+  //         } else {
+  //           if (prevFlag) {
+  //             isValid = false;
+  //             break;
+  //           } else {
+  //             prevFlag = true;
+  //             connections += 1;
+  //           }
+  //         }
+  //       }
+
+  //       if ((j - 1) >= 0 && table[i][j - 1] != "-") {
+  //         isValid = false;
+  //       } else if ((j + word.length) < table[i].length && table[i][j + word.length] != "-") {
+  //         isValid = false;
+  //       }
+
+  //       if (isValid) {
+  //         double tempScore1 = computeScore1(connections, word);
+  //         double tempScore2 = computeScore2(rows, cols, i, j + (word.length ~/ 2));
+  //         double tempScore3 = computeScore3(1, 0, verticalCount, totalCount);
+  //         double tempScore4 = computeScore4(rows, word);
+  //         double tempScore = weightedAverage(weights, [tempScore1, tempScore2, tempScore3, tempScore4]);
+
+  //         if (tempScore > bestScore) {
+  //           bestScore = tempScore;
+  //           bestI = i;
+  //           bestJ = j;
+  //           bestO = 0;
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   // Vertical
+  //   for (int i = 0; i < rows - word.length + 1; i++) {
+  //     for (int j = 0; j < cols; j++) {
+  //       bool isValid = true;
+  //       int connections = 0;
+  //       bool prevFlag = false;
+
+  //       for (int k = 0; k < word.length; k++) {
+  //         if (isConflict(table, true, word[k], i + k, j)) {
+  //           isValid = false;
+  //           break;
+  //         } else if (table[i + k][j] == "-") {
+  //           prevFlag = false;
+  //         } else {
+  //           if (prevFlag) {
+  //             isValid = false;
+  //             break;
+  //           } else {
+  //             prevFlag = true;
+  //             connections += 1;
+  //           }
+  //         }
+  //       }
+
+  //       if ((i - 1) >= 0 && table[i - 1][j] != "-") {
+  //         isValid = false;
+  //       } else if ((i + word.length) < table.length && table[i + word.length][j] != "-") {
+  //         isValid = false;
+  //       }
+
+  //       if (isValid) {
+  //         double tempScore1 = computeScore1(connections, word);
+  //         double tempScore2 = computeScore2(rows, cols, i + (word.length ~/ 2), j);
+  //         double tempScore3 = computeScore3(0, 1, verticalCount, totalCount);
+  //         double tempScore4 = computeScore4(rows, word);
+  //         double tempScore = weightedAverage(weights, [tempScore1, tempScore2, tempScore3, tempScore4]);
+
+  //         if (tempScore > bestScore) {
+  //           bestScore = tempScore;
+  //           bestI = i;
+  //           bestJ = j;
+  //           bestO = 1;
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   if (bestScore > -1) {
+  //     return [bestScore, word, index, bestI, bestJ, bestO];
+  //   } else {
+  //     // Allow placement even if no connections
+  //     for (int i = 0; i < rows; i++) {
+  //       for (int j = 0; j < cols - word.length + 1; j++) {
+  //         bool isValid = true;
+  //         for (int k = 0; k < word.length; k++) {
+  //           if (isConflict(table, false, word[k], i, j + k)) {
+  //             isValid = false;
+  //             break;
+  //           }
+  //         }
+  //         if (isValid) {
+  //           return [0, word, index, i, j, 0];
+  //         }
+  //       }
+  //     }
+
+  //     for (int i = 0; i < rows - word.length + 1; i++) {
+  //       for (int j = 0; j < cols; j++) {
+  //         bool isValid = true;
+  //         for (int k = 0; k < word.length; k++) {
+  //           if (isConflict(table, true, word[k], i + k, j)) {
+  //             isValid = false;
+  //             break;
+  //           }
+  //         }
+  //         if (isValid) {
+  //           return [0, word, index, i, j, 1];
+  //         }
+  //       }
+  //     }
+
+  //     return [-1];
+  //   }
+  // }
+
+  // Map<String, dynamic> generateTable(List<List<String>> table, int rows, int cols, List<Map<String, dynamic>> words, List<double> weights) {
+  //   int verticalCount = 0;
+  //   int totalCount = 0;
+
+  //   for (int outerIndex = 0; outerIndex < words.length; outerIndex++) {
+  //     List<dynamic> best = [-1];
+  //     for (int innerIndex = 0; innerIndex < words.length; innerIndex++) {
+  //       if (words[innerIndex].containsKey('answer') && !words[innerIndex].containsKey('startx')) {
+  //         List<dynamic> temp = attemptToInsert(rows, cols, table, weights, verticalCount, totalCount, words[innerIndex]['answer'], innerIndex);
+  //         if (temp[0] > best[0]) {
+  //           best = temp;
+  //         }
+  //       }
+  //     }
+
+  //     if (best[0] == -1) {
+  //       // Attempt to insert the word without intersections
+  //       for (int innerIndex = 0; innerIndex < words.length; innerIndex++) {
+  //         if (words[innerIndex].containsKey('answer') && !words[innerIndex].containsKey('startx')) {
+  //           List<dynamic> temp = attemptToInsert(rows, cols, table, weights, verticalCount, totalCount, words[innerIndex]['answer'], innerIndex);
+  //           if (temp[0] > best[0]) {
+  //             best = temp;
+  //           }
+  //         }
+  //       }
+  //     }
+
+  //     if (best[0] == -1) {
+  //       break;
+  //     } else {
+  //       addWord(best, words, table);
+  //       if (best[5] == 1) {
+  //         verticalCount += 1;
+  //       }
+  //       totalCount += 1;
+  //     }
+  //   }
+
+  //   for (int index = 0; index < words.length; index++) {
+  //     if (!words[index].containsKey('startx')) {
+  //       words[index]['orientation'] = "none";
+  //     }
+  //   }
+
+  //   return {"table": table, "result": words};
+  // }
 
   Map<String, dynamic> generateTable(List<List<String>> table, int rows, int cols, List<Map<String, dynamic>> words, List<double> weights) {
     int verticalCount = 0;
     int totalCount = 0;
 
+    for (var word in words) {
+      word['orientation'] = "none";
+    }
+
     for (int outerIndex = 0; outerIndex < words.length; outerIndex++) {
       List<dynamic> best = [-1];
+
       for (int innerIndex = 0; innerIndex < words.length; innerIndex++) {
-        if (words[innerIndex].containsKey('answer') && !words[innerIndex].containsKey('startx')) {
+        if (words[innerIndex]['orientation'] == "none") {
           List<dynamic> temp = attemptToInsert(rows, cols, table, weights, verticalCount, totalCount, words[innerIndex]['answer'], innerIndex);
           if (temp[0] > best[0]) {
             best = temp;
@@ -282,33 +422,11 @@ class CrosswordGenerator {
         }
       }
 
-      if (best[0] == -1) {
-        // Attempt to insert the word without intersections
-        for (int innerIndex = 0; innerIndex < words.length; innerIndex++) {
-          if (words[innerIndex].containsKey('answer') && !words[innerIndex].containsKey('startx')) {
-            List<dynamic> temp = attemptToInsert(rows, cols, table, weights, verticalCount, totalCount, words[innerIndex]['answer'], innerIndex);
-            if (temp[0] > best[0]) {
-              best = temp;
-            }
-          }
-        }
-      }
+      if (best[0] == -1) break;
 
-      if (best[0] == -1) {
-        break;
-      } else {
-        addWord(best, words, table);
-        if (best[5] == 1) {
-          verticalCount += 1;
-        }
-        totalCount += 1;
-      }
-    }
-
-    for (int index = 0; index < words.length; index++) {
-      if (!words[index].containsKey('startx')) {
-        words[index]['orientation'] = "none";
-      }
+      addWord(best, words, table);
+      if (best[5] == 1) verticalCount++;
+      totalCount++;
     }
 
     return {"table": table, "result": words};
