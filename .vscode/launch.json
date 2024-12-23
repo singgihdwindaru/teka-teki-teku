@@ -1,0 +1,53 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "teka-teki-teku",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "kakiku_admin",
+            "cwd": "apps/kakiku_admin",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "kakiku_admin (profile mode)",
+            "cwd": "apps/kakiku_admin",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "kakiku_admin (release mode)",
+            "cwd": "apps/kakiku_admin",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "teka_teki_tiku",
+            "cwd": "apps/teka_teki_tiku",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "teka_teki_tiku (profile mode)",
+            "cwd": "apps/teka_teki_tiku",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "teka_teki_tiku (release mode)",
+            "cwd": "apps/teka_teki_tiku",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
