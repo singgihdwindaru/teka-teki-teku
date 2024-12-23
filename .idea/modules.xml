@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/packages/cross_word/melos_cross_word.iml" filepath="$PROJECT_DIR$/packages/cross_word/melos_cross_word.iml" />
       <module fileurl="file://$PROJECT_DIR$/apps/kakiku_admin/melos_kakiku_admin.iml" filepath="$PROJECT_DIR$/apps/kakiku_admin/melos_kakiku_admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/packages/teka_tecore/melos_teka_tecore.iml" filepath="$PROJECT_DIR$/packages/teka_tecore/melos_teka_tecore.iml" />
       <module fileurl="file://$PROJECT_DIR$/apps/teka_teki_tiku/melos_teka_teki_tiku.iml" filepath="$PROJECT_DIR$/apps/teka_teki_tiku/melos_teka_teki_tiku.iml" />
