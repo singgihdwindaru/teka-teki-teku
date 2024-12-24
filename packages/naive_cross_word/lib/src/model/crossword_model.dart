@@ -19,6 +19,55 @@ class CrossWordModel {
 
   /// The layout of the crossword.
   CrossWordLayout layout;
+
+  String getAnswerOfSelectedCell(int col, int row) {
+    return words.firstWhere((word) {
+      if (word.orientation == 'across') {
+        return word.startRow == row && col >= word.startCol && col <= word.endCol;
+      } else if (word.orientation == 'down') {
+        return word.startCol == col && row >= word.startRow && row <= word.endRow;
+      } else {
+        return false;
+      }
+    }).answer;
+  }
+
+  /// Get the word of the selected cell
+  WordModel getWordOfSelectedCell(int col, int row) {
+    return words.firstWhere((word) {
+      if (word.orientation == 'across') {
+        return word.startRow == row && col >= word.startCol && col <= word.endCol;
+      } else if (word.orientation == 'down') {
+        return word.startCol == col && row >= word.startRow && row <= word.endRow;
+      } else {
+        return false;
+      }
+    });
+  }
+
+  /// Check if the cell is selected
+  bool isCurrentCellSelected(SelectedCell? selectedCell, int col, int row) {
+    if (selectedCell == null) {
+      return false;
+    }
+    return selectedCell.row == row && selectedCell.col == col;
+  }
+
+  /// Check if the cell is in the range of the selected cell
+  bool isInRangeOfSelectedRow(SelectedCell? selectedCell, int col, int row) {
+    if (selectedCell == null) {
+      return false;
+    }
+
+    final selectedWord = getWordOfSelectedCell(selectedCell.col, selectedCell.row);
+    if (selectedWord.orientation == 'across') {
+      return selectedWord.startRow == row && col >= selectedWord.startCol && col <= selectedWord.endCol;
+    } else if (selectedWord.orientation == 'down') {
+      return selectedWord.startCol == col && row >= selectedWord.startRow && row <= selectedWord.endRow;
+    } else {
+      return false;
+    }
+  }
 }
 
 /// WordModel
@@ -81,4 +130,11 @@ class CrossWordLayout {
 
   /// The table of the crossword.
   List<List<String>> table;
+}
+
+class SelectedCell {
+  final int row;
+  final int col;
+
+  SelectedCell(this.row, this.col);
 }

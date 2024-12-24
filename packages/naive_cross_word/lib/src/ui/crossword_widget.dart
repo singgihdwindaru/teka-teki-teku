@@ -9,41 +9,41 @@ class CrosswordWidget extends StatefulWidget {
 }
 
 class _CrosswordWidgetState extends State<CrosswordWidget> {
+  SelectedCell? selectedCell;
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      itemBuilder: (context, colIndex) {
-        return ListView.separated(
-          shrinkWrap: true,
-          itemBuilder: (context, rowIndex) {
-            if (dummyCrossWordModel.layout.table[rowIndex][colIndex] != '-') {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, rowIndex) {
+        return SizedBox(
+          height: 30,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, colIndex) {
               return Container(
+                alignment: Alignment.centerLeft,
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(),
+                  color: dummyCrossWordModel.layout.table[rowIndex][colIndex] == "-"
+                      ? Colors.black
+                      : dummyCrossWordModel.isInRangeOfSelectedRow(selectedCell, colIndex, rowIndex)
+                          ? Colors.yellow.withOpacity(dummyCrossWordModel.isCurrentCellSelected(selectedCell, colIndex, rowIndex) ? 1.0 : 0.2)
+                          : Colors.white,
+                  border: Border.all(
+                    color: dummyCrossWordModel.layout.table[rowIndex][colIndex] == "-"
+                        ? selectedCell?.row == rowIndex && selectedCell?.col == colIndex
+                            ? Colors.red
+                            : Colors.white
+                        : Colors.black,
+                  ),
                 ),
+                child: Center(child: Text("${dummyCrossWordModel.layout.table[rowIndex][colIndex]}")),
               );
-            } else {
-              return const ColoredBox(
-                color: Colors.black,
-                child: SizedBox(
-                  width: 30,
-                  height: 30,
-                ),
-              );
-            }
-          },
-          separatorBuilder: (context, rowIndex) {
-            return const Divider();
-          },
-          itemCount: dummyCrossWordModel.layout.rows,
+            },
+            itemCount: dummyCrossWordModel.layout.rows,
+          ),
         );
-      },
-      separatorBuilder: (context, colIndex) {
-        return const Divider();
       },
       itemCount: dummyCrossWordModel.layout.cols,
     );
