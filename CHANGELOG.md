@@ -15,6 +15,34 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`naive_cross_word` - `v0.1.1`](#naive_cross_word---v011)
+ - [`teka_teki_tiku` - `v1.3.0`](#teka_teki_tiku---v130)
+
+---
+
+#### `naive_cross_word` - `v0.1.1`
+
+ - **FEAT**: update unit test.
+ - **FEAT**: create naive cross word widget.
+ - **FEAT**(naive-cross-word): initate new package.
+
+#### `teka_teki_tiku` - `v1.3.0`
+
+ - **FEAT**: update unit test.
+
+
+## 2024-12-24
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`cross_word` - `v0.1.1+2`](#cross_word---v0112)
  - [`teka_teki_tiku` - `v1.2.2`](#teka_teki_tiku---v122)
 
