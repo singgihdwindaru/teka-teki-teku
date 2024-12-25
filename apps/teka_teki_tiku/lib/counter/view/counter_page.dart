@@ -24,7 +24,9 @@ class CounterView extends StatelessWidget {
     final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.counterAppBarTitle)),
-      body: const CrosswordWidget(),
+      body: CrosswordWidget(
+        crossWordModel: dummyCrossWordModel,
+      ),
       // body: InteractiveViewer(
       //   panEnabled: false, // Set it to false to prevent panning.
 

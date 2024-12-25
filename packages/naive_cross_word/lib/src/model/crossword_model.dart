@@ -1,3 +1,5 @@
+import 'package:naive_cross_word/naive_cross_word.dart';
+
 /// CrossWordModel
 class CrossWordModel {
   /// CrossWordModel
@@ -19,6 +21,9 @@ class CrossWordModel {
 
   /// The layout of the crossword.
   CrossWordLayout layout;
+
+  // Selected Word in this crossword
+  SelectedCell? selectedCell;
 
   String getAnswerOfSelectedCell(int col, int row) {
     return words.firstWhere((word) {

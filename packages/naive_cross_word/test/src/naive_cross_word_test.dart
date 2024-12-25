@@ -47,7 +47,9 @@ void main() {
     testWidgets('widget have a tiles', (widgetTester) async {
       await widgetTester.pumpWidget(
         MaterialApp(
-          home: const CrosswordWidget(),
+          home: CrosswordWidget(
+            crossWordModel: dummyCrossWordModel,
+          ),
         ),
       );
       final titleFinder = find.text('I');
@@ -58,7 +60,7 @@ void main() {
   });
 }
 
-final CrossWordModel dummyCrossWordModel = CrossWordModel(
+CrossWordModel dummyCrossWordModel = CrossWordModel(
   id: '1',
   title: 'negara',
   layout: CrossWordLayout(

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:naive_cross_word/naive_cross_word.dart';
 
 class CrosswordWidget extends StatefulWidget {
-  const CrosswordWidget({super.key});
+  final CrossWordModel crossWordModel;
+  const CrosswordWidget({super.key, required this.crossWordModel});
 
   @override
   State<CrosswordWidget> createState() => _CrosswordWidgetState();
 }
 
 class _CrosswordWidgetState extends State<CrosswordWidget> {
-  SelectedCell? selectedCell;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -25,27 +25,27 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: dummyCrossWordModel.layout.table[rowIndex][colIndex] == "-"
+                  color: widget.crossWordModel.layout.table[rowIndex][colIndex] == '-'
                       ? Colors.black
-                      : dummyCrossWordModel.isInRangeOfSelectedRow(selectedCell, colIndex, rowIndex)
-                          ? Colors.yellow.withOpacity(dummyCrossWordModel.isCurrentCellSelected(selectedCell, colIndex, rowIndex) ? 1.0 : 0.2)
+                      : widget.crossWordModel.isInRangeOfSelectedRow(widget.crossWordModel.selectedCell, colIndex, rowIndex)
+                          ? Colors.yellow.withOpacity(widget.crossWordModel.isCurrentCellSelected(dummyCrossWordModel.selectedCell, colIndex, rowIndex) ? 1.0 : 0.2)
                           : Colors.white,
                   border: Border.all(
-                    color: dummyCrossWordModel.layout.table[rowIndex][colIndex] == "-"
-                        ? selectedCell?.row == rowIndex && selectedCell?.col == colIndex
+                    color: widget.crossWordModel.layout.table[rowIndex][colIndex] == "-"
+                        ? widget.crossWordModel.selectedCell?.row == rowIndex && widget.crossWordModel.selectedCell?.col == colIndex
                             ? Colors.red
                             : Colors.white
                         : Colors.black,
                   ),
                 ),
-                child: Center(child: Text("${dummyCrossWordModel.layout.table[rowIndex][colIndex]}")),
+                child: Center(child: Text("${widget.crossWordModel.layout.table[rowIndex][colIndex]}")),
               );
             },
-            itemCount: dummyCrossWordModel.layout.rows,
+            itemCount: widget.crossWordModel.layout.rows,
           ),
         );
       },
-      itemCount: dummyCrossWordModel.layout.cols,
+      itemCount: widget.crossWordModel.layout.cols,
     );
   }
 }
