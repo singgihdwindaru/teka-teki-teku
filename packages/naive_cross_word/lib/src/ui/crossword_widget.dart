@@ -30,8 +30,20 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
                 decoration: BoxDecoration(
                   color: widget.crossWordModel.layout.table[rowIndex][colIndex] == '-'
                       ? Colors.black
-                      : widget.crossWordModel.isInRangeOfSelectedRow(widget.crossWordModel.selectedCell, colIndex, rowIndex)
-                          ? Colors.yellow.withOpacity(widget.crossWordModel.isCurrentCellSelected(dummyCrossWordModel.selectedCell, colIndex, rowIndex) ? 1.0 : 0.2)
+                      : widget.crossWordModel.isInRangeOfSelectedRow(
+                          widget.crossWordModel.selectedCell,
+                          colIndex,
+                          rowIndex,
+                        )
+                          ? Colors.yellow.withOpacity(
+                              widget.crossWordModel.isCurrentCellSelected(
+                                dummyCrossWordModel.selectedCell,
+                                colIndex,
+                                rowIndex,
+                              )
+                                  ? 1.0
+                                  : 0.2,
+                            )
                           : Colors.white,
                   border: Border.all(
                     color: widget.crossWordModel.layout.table[rowIndex][colIndex] == '-'
