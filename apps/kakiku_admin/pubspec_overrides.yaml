@@ -1,6 +1,6 @@
-# melos_managed_dependency_overrides: teka_tekit,teka_tecore
+# melos_managed_dependency_overrides: teka_tecore,teka_tekit
 dependency_overrides:
-  teka_tekit:
-    path: ../../packages/teka_tekit
   teka_tecore:
     path: ../../packages/teka_tecore
+  teka_tekit:
+    path: ../../packages/teka_tekit
