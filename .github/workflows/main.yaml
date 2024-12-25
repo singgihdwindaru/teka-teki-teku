@@ -16,14 +16,15 @@ jobs:
   semantic-pull-request:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
 
-  build_apps:
+  build:
+    strategy:
+      matrix:
+        project:
+          - apps/teka_teki_tiku
+          - apps/kakiku_admin
+          - packages/naive_cross_word
+          - packages/teka_tecore
+          - packages/teka_tekit
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_channel: stable
-      working_directory: apps
-
-  build_packages:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    with:
-      flutter_channel: stable
-      working_directory: packages
