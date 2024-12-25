@@ -1,3 +1,7 @@
+## 1.4.0
+
+ - **FEAT**: update test on naive-cross-word.
+
 ## 1.3.0
 
  - **FEAT**: update unit test.
