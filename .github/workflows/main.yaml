@@ -9,8 +9,9 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
+    paths:
+      - 'apps/**'
+      - 'packages/**'
 
 jobs:
   semantic-pull-request:
@@ -28,4 +29,4 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_channel: stable
-      working-directory: ${{ matrix.project }}
+      working_directory: ${{ matrix.project }}
