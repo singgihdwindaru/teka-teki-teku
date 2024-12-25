@@ -1,7 +1,9 @@
-# melos_managed_dependency_overrides: teka_tecore,teka_tekit,cross_word
+# melos_managed_dependency_overrides: teka_tecore,teka_tekit,cross_word,naive_cross_word
 dependency_overrides:
   cross_word:
     path: ../../packages/cross_word
+  naive_cross_word:
+    path: ../../packages/naive_cross_word
   teka_tecore:
     path: ../../packages/teka_tecore
   teka_tekit:

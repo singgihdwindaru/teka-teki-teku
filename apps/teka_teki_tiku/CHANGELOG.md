@@ -1,3 +1,7 @@
+## 1.3.0
+
+ - **FEAT**: update unit test.
+
 ## 1.2.2
 
  - **FIX**: add zoom and increase words.
