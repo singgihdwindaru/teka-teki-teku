@@ -31,4 +31,5 @@ jobs:
       flutter_channel: stable
       working_directory: ${{ matrix.project }}
       format_line_length: '160'
+      flutter_version: '3.19.6'
       min_coverage: 80
