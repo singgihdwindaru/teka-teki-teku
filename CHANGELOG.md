@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cross_word` - `v0.1.1+3`](#cross_word---v0113)
+ - [`kakiku_admin` - `v1.0.1`](#kakiku_admin---v101)
+ - [`naive_cross_word` - `v0.1.2+1`](#naive_cross_word---v0121)
+ - [`teka_teki_tiku` - `v1.4.1`](#teka_teki_tiku---v141)
+
+---
+
+#### `cross_word` - `v0.1.1+3`
+
+ - **FIX**: update linter warnings.
+
+#### `kakiku_admin` - `v1.0.1`
+
+ - **FIX**: update max line.
+ - **FIX**: update linter warnings.
+
+#### `naive_cross_word` - `v0.1.2+1`
+
+ - **FIX**: update formatting.
+ - **FIX**: update linter warnings.
+
+#### `teka_teki_tiku` - `v1.4.1`
+
+ - **FIX**: update linter warnings.
+
+
 ## 2024-12-25
 
 ### Changes

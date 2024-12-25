@@ -1,3 +1,8 @@
+## 0.1.2+1
+
+ - **FIX**: update formatting.
+ - **FIX**: update linter warnings.
+
 ## 0.1.2
 
  - **FEAT**: update test on naive-cross-word.

@@ -1,3 +1,7 @@
+## 1.4.1
+
+ - **FIX**: update linter warnings.
+
 ## 1.4.0
 
  - **FEAT**: update test on naive-cross-word.

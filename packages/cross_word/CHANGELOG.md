@@ -1,3 +1,7 @@
+## 0.1.1+3
+
+ - **FIX**: update linter warnings.
+
 ## 0.1.1+2
 
  - **FIX**: improve performance of the crossword generator.
