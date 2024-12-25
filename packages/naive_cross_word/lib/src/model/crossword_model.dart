@@ -1,5 +1,3 @@
-import 'package:naive_cross_word/naive_cross_word.dart';
-
 /// CrossWordModel
 class CrossWordModel {
   /// CrossWordModel
@@ -138,8 +136,7 @@ class CrossWordLayout {
 }
 
 class SelectedCell {
+  SelectedCell(this.row, this.col);
   final int row;
   final int col;
-
-  SelectedCell(this.row, this.col);
 }

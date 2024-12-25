@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:naive_cross_word/naive_cross_word.dart';
 
 class CrosswordWidget extends StatefulWidget {
+  const CrosswordWidget({
+    required this.crossWordModel,
+    super.key,
+  });
   final CrossWordModel crossWordModel;
-  const CrosswordWidget({super.key, required this.crossWordModel});
 
   @override
   State<CrosswordWidget> createState() => _CrosswordWidgetState();
@@ -31,14 +34,14 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
                           ? Colors.yellow.withOpacity(widget.crossWordModel.isCurrentCellSelected(dummyCrossWordModel.selectedCell, colIndex, rowIndex) ? 1.0 : 0.2)
                           : Colors.white,
                   border: Border.all(
-                    color: widget.crossWordModel.layout.table[rowIndex][colIndex] == "-"
+                    color: widget.crossWordModel.layout.table[rowIndex][colIndex] == '-'
                         ? widget.crossWordModel.selectedCell?.row == rowIndex && widget.crossWordModel.selectedCell?.col == colIndex
                             ? Colors.red
                             : Colors.white
                         : Colors.black,
                   ),
                 ),
-                child: Center(child: Text("${widget.crossWordModel.layout.table[rowIndex][colIndex]}")),
+                child: Center(child: Text(widget.crossWordModel.layout.table[rowIndex][colIndex])),
               );
             },
             itemCount: widget.crossWordModel.layout.rows,
