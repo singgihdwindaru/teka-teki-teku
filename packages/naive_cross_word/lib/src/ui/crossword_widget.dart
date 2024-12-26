@@ -25,8 +25,8 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
             itemBuilder: (context, colIndex) {
               return Container(
                 alignment: Alignment.centerLeft,
-                width: 30,
-                height: 30,
+                width: 25,
+                height: 25,
                 decoration: BoxDecoration(
                   color: widget.crossWordModel.layout.table[rowIndex][colIndex] == '-'
                       ? Colors.black
