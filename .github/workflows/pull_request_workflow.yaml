@@ -46,10 +46,16 @@ jobs:
           done
 
           # Set output
-          echo "::set-output name=projects::$(echo $affected_projects | tr ' ' '\n' | sort | uniq | jq -R -s -c 'split("\n")[:-1]')"
+          affected_projects_json=$(echo $affected_projects | tr ' ' '\n' | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
+          echo "::set-output name=projects::$affected_projects_json"
+
+      - name: Debug Output
+        run: |
+          echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
 
   build:
     needs: determine-changes
+    if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
