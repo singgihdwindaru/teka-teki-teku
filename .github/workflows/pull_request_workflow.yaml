@@ -50,36 +50,13 @@ jobs:
 
   build:
     needs: determine-changes
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: stable
-
-      - name: Install dependencies
-        run: flutter pub get
-        working-directory: ${{ matrix.project }}
-
-      - name: Format, Analyze, and Test
-        uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-        with:
-          flutter_channel: stable
-          working_directory: ${{ matrix.project }}
-          format_line_length: '160'
-          flutter_version: '3.19.6'
-          min_coverage: 60
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ${{ matrix.project }}/coverage/lcov.info
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: ${{ matrix.project }}
-          fail_ci_if_error: true
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      flutter_channel: stable
+      working_directory: ${{ matrix.project }}
+      format_line_length: '160'
+      flutter_version: '3.19.6'
+      min_coverage: 60
