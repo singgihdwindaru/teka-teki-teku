@@ -19,7 +19,7 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, rowIndex) {
         return SizedBox(
-          height: 30,
+          height: 25,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, colIndex) {
