@@ -57,8 +57,13 @@ jobs:
     name: Build and Test
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Build
         uses: andiasrafil/teka-teki-teku/.github/workflows/build_ci.yaml@main
+        with:
+          project: ${{ matrix.project }}
