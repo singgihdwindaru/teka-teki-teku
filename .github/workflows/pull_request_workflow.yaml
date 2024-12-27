@@ -55,7 +55,7 @@ jobs:
 
   build-and-test:
     needs: determine-changes
-    uses: andiasrafil/teka-teki-teku/.github/workflows/build_ci.yaml@main
+    uses: .github/workflows/build_ci.yaml@main
     with:
       project: ${{ matrix.project }}
     if: needs.determine-changes.outputs.projects != '[]'
