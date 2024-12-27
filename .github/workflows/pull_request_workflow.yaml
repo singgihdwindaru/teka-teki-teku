@@ -55,46 +55,39 @@ jobs:
   build:
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      flutter_channel: stable
+      working_directory: ${{ matrix.project }}
+      format_line_length: '160'
+      flutter_version: '3.19.6'
+      min_coverage: 60
+  upload-coverage:
+    name: Upload coverage to Codecov
+    needs: [build, determine-changes]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     steps:
-      - name: Build and Test
-        uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-        with:
-          flutter_channel: stable
-          working_directory: ${{ matrix.project }}
-          format_line_length: '160'
-          flutter_version: '3.19.6'
-          min_coverage: 60
+      # - name: Upload Coverage Summary
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: coverage-summary
+      #     path: coverage-summary.json
+      # - name: Download coverage
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: ${{ matrix.project }}/coverage/lcov.info
-  # upload-coverage:
-  #   name: Upload coverage to Codecov
-  #   needs: [build, determine-changes]
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
-  #   steps:
-  #     # - name: Upload Coverage Summary
-  #     #   uses: actions/upload-artifact@v3
-  #     #   with:
-  #     #     name: coverage-summary
-  #     #     path: coverage-summary.json
-  #     # - name: Download coverage
-  #     #   uses: actions/download-artifact@v3
-  #     #   with:
-  #     #     name: code-coverage-report
-  #     #     path: coverage
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v3
-  #       with:
-  #         files: ${{ matrix.project }}/coverage/lcov.info
-  #         fail_ci_if_error: true
+          files: apps/teka_teki_tiku/coverage/lcov.info
+          fail_ci_if_error: true
   # coverage_report:
   #   name: Generate coverage report
   #   needs: [build, determine-changes]
