@@ -102,11 +102,16 @@ jobs:
           mkdir -p coverage-summaries
           total_coverage=()
           for file in $(find coverage-artifacts -name "lcov.info"); do
-            coverage=$(grep -oP 'LF:\d+\nLH:\d+' $file | awk -F: '
-              { total_lines += $2 }
-              NR % 2 == 0 { total_hit_lines += $2 }
-              END { if (total_lines > 0) printf "%.2f", (total_hit_lines / total_lines) * 100 }
-            ')
+            # Calculate coverage percentage
+            total_lines=$(grep -oP 'LF:\d+' $file | cut -d: -f2)
+            total_hit_lines=$(grep -oP 'LH:\d+' $file | cut -d: -f2)
+            
+            if [[ $total_lines -gt 0 ]]; then
+              coverage=$(awk "BEGIN {printf \"%.2f\", ($total_hit_lines / $total_lines) * 100}")
+            else
+              coverage="0.00"
+            fi
+            
             total_coverage+=("$file:$coverage")
             echo "$file: $coverage%" >> coverage-summaries/summary.txt
           done
@@ -114,6 +119,7 @@ jobs:
           # Prepare JSON for comment
           coverage_json=$(printf '%s\n' "${total_coverage[@]}" | jq -R -s -c 'split("\n")[:-1]')
           echo "total_coverage=$coverage_json" >> $GITHUB_ENV
+
 
       - name: Debug Coverage
         run: |
