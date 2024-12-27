@@ -74,7 +74,20 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const affectedProjects = JSON.parse('${{ needs.determine-changes.outputs.projects }}');
+            const rawProjects = '${{ needs.determine-changes.outputs.projects }}';
+            // Ensure the output is not empty
+            if (!rawProjects || rawProjects === '[]') {
+              console.log('No affected projects. Skipping coverage comment.');
+              return;
+            }
+
+            let affectedProjects;
+            try {
+              affectedProjects = JSON.parse(rawProjects);
+            } catch (error) {
+              throw new Error(`Failed to parse affected projects: ${error.message}`);
+            }
+
             const coverageComment = `### 🛠 Code Coverage Results\n\n` +
               affectedProjects
                 .map(project => `- **${project}**: Coverage results will be added here.`)
@@ -87,4 +100,5 @@ jobs:
               issue_number: context.payload.pull_request.number,
               body: coverageComment
             });
+
 
