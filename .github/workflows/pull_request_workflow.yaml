@@ -58,5 +58,7 @@ jobs:
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
       - name: Build
         uses: andiasrafil/teka-teki-teku/.github/workflows/build_ci.yaml@main
