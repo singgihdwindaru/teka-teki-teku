@@ -70,6 +70,3 @@ jobs:
       # Add extra steps here
       - name: Post-Build Step
         run: echo "Running additional steps after build and test for ${{ matrix.project }}"
-
-      - name: Archive Artifacts
-        run: echo "Archiving artifacts for ${{ matrix.project }}"
