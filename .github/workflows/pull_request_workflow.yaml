@@ -67,7 +67,7 @@ jobs:
       min_coverage: 60
 
   comment-coverage:
-    needs: build
+    needs: [build, determine-changes]
     runs-on: ubuntu-latest
     steps:
       - name: Post Coverage to Pull Request
