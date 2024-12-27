@@ -65,18 +65,58 @@ jobs:
       format_line_length: '160'
       flutter_version: '3.19.6'
       min_coverage: 60
+  determine-changes-coverage:
+    name: Determine Changed Projects
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.set-changes.outputs.projects }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all commits to ensure the base commit is available
+
+      - name: Get changed projects and dependencies
+        id: set-changes
+        run: |
+          # Define a dependency map
+          declare -A dependency_map
+          dependency_map["packages/naive_cross_word"]="apps/teka_teki_tiku"
+          dependency_map["packages/teka_tecore"]="apps/teka_teki_tiku apps/kakiku_admin"
+          dependency_map["packages/teka_tekit"]="apps/kakiku_admin"
+
+          # Identify changed projects
+          changed_projects=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} \
+            | grep -E '^(apps|packages)/' | cut -d'/' -f1-2 | sort | uniq)
+
+          # Include dependent projects
+          affected_projects=""
+          for project in $changed_projects; do
+            affected_projects+="$project "
+            if [[ -v dependency_map[$project] ]]; then
+              affected_projects+="${dependency_map[$project]} "
+            fi
+          done
+
+          # Set output
+          affected_projects_json=$(echo $affected_projects | tr ' ' '\n' | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
+          echo "::set-output name=projects::$affected_projects_json"
+
+      - name: Debug Output
+        run: |
+          echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
 
   comment-coverage:
-    needs: [build, determine-changes]
+    needs: [build, determine-changes-coverage]
     runs-on: ubuntu-latest
     steps:
       - name: Post Coverage to Pull Request
         uses: actions/github-script@v6
         with:
           script: |
-            const rawProjects = '${{ needs.determine-changes.outputs.projects }}';
+            const rawProjects = '${{ needs.determine-changes-coverage.outputs.projects }}';
 
-            if (needs.determine-changes.outputs.projects == '[]') {
+            if (needs.determine-changes-coverage.outputs.projects == '[]') {
               console.log('No affected projects. Skipping coverage comment.');
               return;
             }
