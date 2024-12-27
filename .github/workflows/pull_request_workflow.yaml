@@ -53,7 +53,7 @@ jobs:
           echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
 
   build:
-    name: Build, Test, Analyze, and Upload Coverage
+    name: Build, Test, Analyze and Upload Coverage
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
@@ -78,7 +78,7 @@ jobs:
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-${{ matrix.project }}
+          name: ${{ matrix.project | replace('/', '_') }}
           path: ${{ matrix.project }}/coverage/lcov.info
 
   comment-coverage:
