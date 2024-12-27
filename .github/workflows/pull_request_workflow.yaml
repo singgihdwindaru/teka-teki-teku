@@ -53,7 +53,6 @@ jobs:
           echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
 
   build:
-    name: Build, Test, Analyze, and Upload Coverage
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
