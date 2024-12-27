@@ -56,6 +56,9 @@ jobs:
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     uses: ./.github/workflows/build_ci.yaml
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }} # Use the JSON array from the previous step
     with:
       flutter_channel: stable
       working_directory: ${{ matrix.project }}
