@@ -69,6 +69,9 @@ jobs:
     name: Upload coverage to Codecov
     needs: [build, determine-changes]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     steps:
       # - name: Upload Coverage Summary
       #   uses: actions/upload-artifact@v3
