@@ -75,9 +75,5 @@ jobs:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     steps:
-      - name: Checkout data
-        uses: actions/checkout@v3
-        with:
-          repository: andiasrafil/{{ matrix.project }}
       - name: Checkout
         uses: k1LoW/octocov-action@v1
