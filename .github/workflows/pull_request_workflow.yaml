@@ -75,16 +75,16 @@ jobs:
           cd ${{ matrix.project }}
           flutter test --coverage
 
-      - name: Sanitize Artifact Name and Upload Coverage
+      - name: Sanitize Artifact Name
+        id: sanitize-artifact
         run: |
-          sanitized_name=$(echo "${{ matrix.project }}" | tr '/' '_')
-          mkdir -p coverage-artifacts/$sanitized_name
-          mv ${{ matrix.project }}/coverage/lcov.info coverage-artifacts/$sanitized_name/
-        shell: bash
-      - uses: actions/upload-artifact@v3
+          echo "::set-output name=name::$(echo '${{ matrix.project }}' | tr '/' '_')"
+
+      - name: Upload Coverage Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.project }}
-          path: coverage-artifacts/
+          name: ${{ steps.sanitize-artifact.outputs.name }}
+          path: ${{ matrix.project }}/coverage/lcov.info
 
   comment-coverage:
     name: Comment Coverage
