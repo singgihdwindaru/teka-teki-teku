@@ -10,9 +10,6 @@ on:
       project:
         description: Project to build
         required: true
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
