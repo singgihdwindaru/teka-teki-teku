@@ -55,7 +55,7 @@ jobs:
   build-and-test:
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
-    uses: /.github/workflows/build_ci.yaml
+    uses: /.github/workflows/build_ci.yaml@main
     with:
       flutter_channel: stable
       working_directory: ${{ matrix.project }}
