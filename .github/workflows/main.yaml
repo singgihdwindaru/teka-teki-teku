@@ -49,5 +49,5 @@ jobs:
       - name: Very Good Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          path: /coverage/lcov.info
+          path: ${{ matrix.project }}/coverage/lcov.info
           min_coverage: 0
