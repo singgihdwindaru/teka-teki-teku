@@ -1,3 +1,8 @@
+## 1.4.2
+
+ - **FIX**: update navbar title.
+ - **FIX**: update navbar title.
+
 ## 1.4.1
 
  - **FIX**: update linter warnings.

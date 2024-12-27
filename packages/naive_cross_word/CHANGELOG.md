@@ -1,3 +1,8 @@
+## 0.1.2+2
+
+ - **FIX**: adjust height of the box.
+ - **FIX**: update cell size.
+
 ## 0.1.2+1
 
  - **FIX**: update formatting.
