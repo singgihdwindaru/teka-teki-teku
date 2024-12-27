@@ -76,7 +76,7 @@ jobs:
           script: |
             const rawProjects = '${{ needs.determine-changes.outputs.projects }}';
 
-            if (!rawProjects || rawProjects === '[]') {
+            if (needs.determine-changes.outputs.projects == '[]') {
               console.log('No affected projects. Skipping coverage comment.');
               return;
             }
