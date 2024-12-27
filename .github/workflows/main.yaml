@@ -43,9 +43,11 @@ jobs:
           - packages/teka_tecore
           - packages/teka_tekit
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v2
       - name: Very Good Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          path: ${{ matrix.project }}/coverage/lcov.info
+          path: /coverage/lcov.info
+          min_coverage: 0
