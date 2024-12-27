@@ -5,11 +5,12 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       project:
         description: Project to build
         required: true
+        type: string
 
 jobs:
   build:
