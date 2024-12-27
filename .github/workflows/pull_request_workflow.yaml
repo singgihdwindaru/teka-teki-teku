@@ -71,6 +71,13 @@ jobs:
     name: Octocov
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     steps:
-      - name: Checkou
+      - name: Checkout data
+        uses: actions/checkout@v3
+        with:
+          repository: andiasrafil/{{ matrix.project }}
+      - name: Checkout
         uses: k1LoW/octocov-action@v1
