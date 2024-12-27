@@ -70,15 +70,20 @@ jobs:
     needs: [build, determine-changes]
     runs-on: ubuntu-latest
     steps:
-      - name: Download coverage
-        uses: actions/download-artifact@v3
-        with:
-          name: code-coverage-report
-          path: coverage
+      # - name: Upload Coverage Summary
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: coverage-summary
+      #     path: coverage-summary.json
+      # - name: Download coverage
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: coverage/lcov.info
+          files: ${{ matrix.project }}/coverage/lcov.info
           fail_ci_if_error: true
   # coverage_report:
   #   name: Generate coverage report
