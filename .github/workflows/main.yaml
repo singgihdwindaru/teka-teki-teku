@@ -29,3 +29,23 @@ jobs:
       format_line_length: '160'
       flutter_version: '3.19.6'
       min_coverage: 60
+  
+  test:
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    strategy:
+      matrix:
+        project:
+          - apps/teka_teki_tiku
+          - apps/kakiku_admin
+          - packages/naive_cross_word
+          - packages/teka_tecore
+          - packages/teka_tekit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Very Good Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: ${{ matrix.project }}/coverage/lcov.info
