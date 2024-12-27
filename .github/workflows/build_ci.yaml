@@ -115,3 +115,8 @@ jobs:
           path: ${{inputs.working_directory}}/coverage/lcov.info
           exclude: ${{inputs.coverage_excludes}}
           min_coverage: ${{inputs.min_coverage}}
+
+      - name: 📤 Comment coverage/lcov.info
+        uses: k1LoW/octocov-action@v1
+        with:
+          config: ${{inputs.working_directory}}.octocov.yml
