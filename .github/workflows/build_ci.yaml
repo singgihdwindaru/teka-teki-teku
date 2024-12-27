@@ -119,4 +119,4 @@ jobs:
       - name: 📤 Comment coverage/lcov.info
         uses: k1LoW/octocov-action@v1
         with:
-          config: ${{inputs.working_directory}}.octocov.yml
+          config: ${{inputs.working_directory}}/.octocov.yml
