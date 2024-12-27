@@ -50,7 +50,6 @@ jobs:
 
   build:
     needs: determine-changes
-    if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
@@ -60,6 +59,7 @@ jobs:
       working_directory: ${{ matrix.project }}
       format_line_length: '160'
       flutter_version: '3.19.6'
+      min_coverage: 60
   coverage:
     runs-on: ubuntu-latest
     needs: [build, determine-changes]
