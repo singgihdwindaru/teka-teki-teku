@@ -54,11 +54,22 @@ jobs:
           echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
 
   build-and-test:
+    name: Build and Test
     needs: determine-changes
-    uses: ./.github/workflows/build_ci.yaml
-    with:
-      project: ${{ matrix.project }}
-    if: needs.determine-changes.outputs.projects != '[]'
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
+    steps:
+
+      - name: Run Build and Test (Reusable Workflow)
+        uses: andiasrafil/teka-teki-teku/.github/workflows/build_ci.yaml@main
+        with:
+          project: ${{ matrix.project }}
+
+      # Add extra steps here
+      - name: Post-Build Step
+        run: echo "Running additional steps after build and test for ${{ matrix.project }}"
+
+      - name: Archive Artifacts
+        run: echo "Archiving artifacts for ${{ matrix.project }}"
