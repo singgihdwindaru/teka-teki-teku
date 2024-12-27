@@ -61,6 +61,10 @@ jobs:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     steps:
       - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all commits to ensure the base commit is available
+      - name: Build and Test
         uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
         with:
           flutter_channel: stable
