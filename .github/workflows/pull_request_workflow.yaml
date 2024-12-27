@@ -54,7 +54,7 @@ jobs:
       - name: Set Environment Variable
         run: |
           echo "::set-output name=projects::$affected_projects_json"
-          echo "::set-env name=AFFECTED_PROJECTS::$affected_projects_json" 
+          echo "::set-env name=AFFECTED_PROJECTS::$affected_projects_json"
 
   build:
     needs: determine-changes
@@ -78,7 +78,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const rawProjects = core.getInput('AFFECTED_PROJECTS');
+            const rawProjects = core.getenv('AFFECTED_PROJECTS');
 
             if (rawProjects == '[]') {
               console.log('No affected projects. Skipping coverage comment.');
