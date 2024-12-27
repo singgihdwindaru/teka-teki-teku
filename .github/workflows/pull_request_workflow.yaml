@@ -51,22 +51,26 @@ jobs:
       - name: Debug Output
         run: |
           echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
+
   build:
     name: Build, Test, Analyze and Upload Coverage
-    runs-on: ubuntu-latest
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      flutter_channel: stable
+      working_directory: ${{ matrix.project }}
+      format_line_length: '160'
+      flutter_version: '3.19.6'
+      min_coverage: 60
+
+  octocov:
+    name: Octocov
+    needs: build
+    runs-on: ubuntu-latest
     steps:
-      - name: Build and Test
-        uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-        with:
-          flutter_channel: stable
-          working_directory: ${{ matrix.project }}
-          format_line_length: '160'
-          flutter_version: '3.19.6'
-          min_coverage: 60
-      - name: Octocov
+      - name: Checkou
         uses: k1LoW/octocov-action@v1
