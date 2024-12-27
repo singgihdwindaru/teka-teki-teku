@@ -74,7 +74,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const rawProjects = context.needs.determine-changes.outputs.projects;
+            const rawProjects = context.workflow.jobs.determine-changes.outputs.projects;
 
             if (rawProjects == '[]') {
               console.log('No affected projects. Skipping coverage comment.');
