@@ -68,6 +68,7 @@ jobs:
       min_coverage: 60
 
   comment-coverage:
+    name: Comment Coverage
     needs: build
     runs-on: ubuntu-latest
     steps:
