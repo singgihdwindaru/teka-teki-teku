@@ -1,4 +1,3 @@
-# Pull Request Workflow
 name: Pull Request Workflow
 
 concurrency:
@@ -55,10 +54,11 @@ jobs:
 
   build-and-test:
     needs: determine-changes
-    uses: ./.github/workflows/build_ci.yaml
+    if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
+    uses: /.github/workflows/build_ci.yaml
     with:
-      project: ${{ matrix.project }}
-    if: needs.determine-changes.outputs.projects != '[]'
-    strategy:
-      matrix:
-        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
+      flutter_channel: stable
+      working_directory: ${{ matrix.project }}
+      format_line_length: '160'
+      flutter_version: '3.19.6'
+      min_coverage: 60
