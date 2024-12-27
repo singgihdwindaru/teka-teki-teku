@@ -10,7 +10,7 @@ comment:
   if: is_pull_request
 summary:
   if: true
-repository: andiasrafil/packages/teka_tekit
+repository: andiasrafil/teka-teki-teku/packages/cross_word
 report:
   if: is_default_branch
   datastores:

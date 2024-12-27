@@ -13,7 +13,7 @@ comment:
   if: is_pull_request
 summary:
   if: true
-repository: andiasrafil/packages/naive_cross_word
+repository: andiasrafil/teka-teki-teku/packages/naive_cross_word
 report:
   if: is_default_branch
   datastores:

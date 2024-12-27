@@ -10,7 +10,7 @@ comment:
   if: is_pull_request
 summary:
   if: true
-repository: andiasrafil/apps/kakiku_admin
+repository: andiasrafil/teka-teki-teku/packages/cross_word
 report:
   if: is_default_branch
   datastores:
