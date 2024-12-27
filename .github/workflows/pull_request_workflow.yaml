@@ -66,25 +66,6 @@ jobs:
       format_line_length: '160'
       flutter_version: '3.19.6'
       min_coverage: 60
-  coverage_report:
-    name: Generate coverage report
-    needs: [build, determine-changes]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
-    steps:
-    - name: Setup LCOV
-      uses: hrishikesh-kadam/setup-lcov@v1
-    - name: Report code coverage
-      uses: zgosalvez/github-actions-report-lcov@v3
-      with:
-        coverage-files: coverage/lcov.info
-        minimum-coverage: 60
-        artifact-name: code-coverage-report
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ${{ matrix.project }}
-        update-comment: true
   comment-coverage:
     needs: [build, determine-changes]
     runs-on: ubuntu-latest
