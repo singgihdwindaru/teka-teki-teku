@@ -53,29 +53,42 @@ jobs:
           echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
 
   build:
-    name: Build, Test, Analyze and Upload Coverage
+    name: Build, Test, Analyze, and Upload Coverage
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    with:
-      flutter_channel: stable
-      working_directory: ${{ matrix.project }}
-      format_line_length: '160'
-      flutter_version: '3.19.6'
-      min_coverage: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'
+          channel: stable
+
+      - name: Run Tests
+        run: |
+          cd ${{ matrix.project }}
+          flutter test --coverage
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-${{ matrix.project }}
+          path: ${{ matrix.project }}/coverage/lcov.info
 
   comment-coverage:
     name: Comment Coverage
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download coverage artifacts
+      - name: Download Coverage Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: coverage-${{ matrix.project }}
           path: coverage-artifacts
 
       - name: Parse Coverage
