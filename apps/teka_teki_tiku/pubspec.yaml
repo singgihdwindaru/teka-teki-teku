@@ -1,6 +1,6 @@
 name: teka_teki_tiku
 description: Aplikasi Permainan Teka-Teki
-version: 1.4.2
+version: 1.4.3
 publish_to: none
 
 environment:

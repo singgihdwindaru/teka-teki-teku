@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`teka_teki_tiku` - `v1.4.3`](#teka_teki_tiku---v143)
+
+---
+
+#### `teka_teki_tiku` - `v1.4.3`
+
+ - **FIX**: use l10n.
+
+
+## 2024-12-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`naive_cross_word` - `v0.1.2+2`](#naive_cross_word---v0122)
  - [`teka_teki_tiku` - `v1.4.2`](#teka_teki_tiku---v142)
 
