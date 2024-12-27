@@ -61,12 +61,17 @@ jobs:
       flutter_version: '3.19.6'
       min_coverage: 60
   coverage:
+    runs-on: ubuntu-latest
     needs: [build, determine-changes]
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/coverage.yml@v1
-    with:
-      working_directory: ${{ matrix.project }}
-      min_coverage: 60
-      path: '/coverage/lcov.info'
+    defaults:
+      run:
+        working-directory: my_project/
+    steps:
+      - uses: actions/checkout@v2
+      - name: Very Good Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: ${{ matrix.project }}/coverage/lcov.info
