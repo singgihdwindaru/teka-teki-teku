@@ -68,7 +68,7 @@ jobs:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     defaults:
       run:
-        working-directory: my_project/
+        working-directory: ${{ matrix.project }}
     steps:
       - uses: actions/checkout@v2
       - name: Very Good Coverage
