@@ -54,96 +54,68 @@ jobs:
 
   build:
     name: Build, Test, Analyze and Upload Coverage
-    runs-on: ubuntu-latest
     needs: determine-changes
     if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
       matrix:
         project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      flutter_channel: stable
+      working_directory: ${{ matrix.project }}
+      format_line_length: '160'
+      flutter_version: '3.19.6'
+      min_coverage: 60
+  coverage_report:
+    name: Generate coverage report
+    needs: [build, determine-changes]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     steps:
-      - name: Build Test and Analyze
-        uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    - name: Setup LCOV
+      uses: hrishikesh-kadam/setup-lcov@v1
+    - name: Report code coverage
+      uses: zgosalvez/github-actions-report-lcov@v3
+      with:
+        coverage-files: coverage/lcov.info
+        minimum-coverage: 60
+        artifact-name: code-coverage-report
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ${{ matrix.project }}
+        update-comment: true
+  comment-coverage:
+    needs: [build, determine-changes]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post Coverage to Pull Request
+        uses: actions/github-script@v6
         with:
-          flutter_channel: stable
-          working_directory: ${{ matrix.project }}
-          format_line_length: '160'
-          flutter_version: '3.19.6'
-          min_coverage: 60
-      - name: Upload results to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-  # upload-coverage:
-  #   name: Upload coverage to Codecov
-  #   needs: [build, determine-changes]
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
-  #   steps:
-  #     # - name: Upload Coverage Summary
-  #     #   uses: actions/upload-artifact@v3
-  #     #   with:
-  #     #     name: coverage-summary
-  #     #     path: coverage-summary.json
-  #     # - name: Download coverage
-  #     #   uses: actions/download-artifact@v3
-  #     #   with:
-  #     #     name: code-coverage-report
-  #     #     path: coverage
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v3
-  #       with:
-  #         token: ${{ secrets.CODECOV_TOKEN }}
-  #         files: apps/teka_teki_tiku/coverage/lcov.info
-  #         fail_ci_if_error: true
-  # coverage_report:
-  #   name: Generate coverage report
-  #   needs: [build, determine-changes]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Setup LCOV
-  #     uses: hrishikesh-kadam/setup-lcov@v1
-  #   - name: Report code coverage
-  #     uses: zgosalvez/github-actions-report-lcov@v3
-  #     with:
-  #       coverage-files: coverage/lcov.*.info
-  #       minimum-coverage: 60
-  #       artifact-name: code-coverage-report
-  #       github-token: ${{ secrets.GITHUB_TOKEN }}
-  #       working-directory: ${{ matrix.project }}
-  #       update-comment: true
-  # comment-coverage:
-  #   needs: [build, determine-changes]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Post Coverage to Pull Request
-  #       uses: actions/github-script@v6
-  #       with:
-  #         script: |
-  #           const rawProjects = '${{ needs.determine-changes.outputs.projects }}';
-  #           // Ensure the output is not empty
-  #           if (!rawProjects || rawProjects === '[]') {
-  #             console.log('No affected projects. Skipping coverage comment.');
-  #             return;
-  #           }
+          script: |
+            const rawProjects = '${{ needs.determine-changes.outputs.projects }}';
+            // Ensure the output is not empty
+            if (!rawProjects || rawProjects === '[]') {
+              console.log('No affected projects. Skipping coverage comment.');
+              return;
+            }
 
-  #           let affectedProjects;
-  #           try {
-  #             affectedProjects = JSON.parse(rawProjects);
-  #           } catch (error) {
-  #             throw new Error(`Failed to parse affected projects: ${error.message}`);
-  #           }
+            let affectedProjects;
+            try {
+              affectedProjects = JSON.parse(rawProjects);
+            } catch (error) {
+              throw new Error(`Failed to parse affected projects: ${error.message}`);
+            }
 
-  #           const coverageComment = `### 🛠 Code Coverage Results\n\n` +
-  #             affectedProjects
-  #               .map(project => `- **${project}**: ${project}/coverage/lcov.info`)
-  #               .join("\n") +
-  #             `\n\n_This comment was generated by a GitHub Action._`;
+            const coverageComment = `### 🛠 Code Coverage Results\n\n` +
+              affectedProjects
+                .map(project => `- **${project}**: ${project}/coverage/lcov.info`)
+                .join("\n") +
+              `\n\n_This comment was generated by a GitHub Action._`;
 
-  #           await github.rest.issues.createComment({
-  #             owner: context.repo.owner,
-  #             repo: context.repo.repo,
-  #             issue_number: context.payload.pull_request.number,
-  #             body: coverageComment
-  #           });
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: coverageComment
+            });
