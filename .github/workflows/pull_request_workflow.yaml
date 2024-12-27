@@ -75,7 +75,7 @@ jobs:
         with:
           script: |
             const rawProjects = '${{ needs.determine-changes.outputs.projects }}';
-            // Ensure the output is not empty
+
             if (!rawProjects || rawProjects === '[]') {
               console.log('No affected projects. Skipping coverage comment.');
               return;
@@ -100,5 +100,6 @@ jobs:
               issue_number: context.payload.pull_request.number,
               body: coverageComment
             });
+
 
 
