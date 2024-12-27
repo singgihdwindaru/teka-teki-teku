@@ -18,7 +18,7 @@ jobs:
     name: Determine Changed Projects
     runs-on: ubuntu-latest
     outputs:
-      projects: ${{ steps.set_changes.outputs.projects }}
+      projects: ${{ steps.set-changes.outputs.projects }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -49,12 +49,16 @@ jobs:
           affected_projects_json=$(echo $affected_projects | tr ' ' '\n' | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
           echo "::set-output name=projects::$affected_projects_json"
 
+      - name: Debug Output
+        run: |
+          echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
+
   build:
     needs: determine-changes
-    if: needs.determine_changes.outputs.projects != '[]' # Skip if no projects are changed
+    if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
     strategy:
       matrix:
-        project: ${{ fromJson(needs.determine_changes.outputs.projects) }}
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_channel: stable
