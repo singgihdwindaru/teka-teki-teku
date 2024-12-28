@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`teka_teki_tiku` - `v1.4.3`](#teka_teki_tiku---v143)
+
+---
+
+#### `teka_teki_tiku` - `v1.4.3`
+
+ - **FIX**: use l10n.
+
+
+## 2024-12-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`naive_cross_word` - `v0.1.2+2`](#naive_cross_word---v0122)
+ - [`teka_teki_tiku` - `v1.4.2`](#teka_teki_tiku---v142)
+
+---
+
+#### `naive_cross_word` - `v0.1.2+2`
+
+ - **FIX**: adjust height of the box.
+ - **FIX**: update cell size.
+
+#### `teka_teki_tiku` - `v1.4.2`
+
+ - **FIX**: update navbar title.
+ - **FIX**: update navbar title.
+
+
 ## 2024-12-26
 
 ### Changes

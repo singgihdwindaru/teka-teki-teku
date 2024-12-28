@@ -11,9 +11,6 @@ on:
       - 'packages/**'
 
 jobs:
-  semantic-pull-request:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
-
   determine-changes:
     name: Determine Changed Projects
     runs-on: ubuntu-latest
@@ -22,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all commits to ensure the base commit is available
 
       - name: Get changed projects and dependencies
         id: set-changes
@@ -46,14 +45,20 @@ jobs:
           done
 
           # Set output
-          echo "::set-output name=projects::$(echo $affected_projects | tr ' ' '\n' | sort | uniq | jq -R -s -c 'split("\n")[:-1]')"
+          affected_projects_json=$(echo $affected_projects | tr ' ' '\n' | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
+          echo "::set-output name=projects::$affected_projects_json"
 
-  build:
+      - name: Debug Output
+        run: |
+          echo "Affected Projects: ${{ steps.set-changes.outputs.projects }}"
+
+  build-and-test:
     needs: determine-changes
+    if: needs.determine-changes.outputs.projects != '[]' # Skip if no projects are changed
+    uses: ./.github/workflows/build_ci.yaml
     strategy:
       matrix:
-        project: ${{ fromJson(needs.determine-changes.outputs.projects) }}
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+        project: ${{ fromJson(needs.determine-changes.outputs.projects) }} # Use the JSON array from the previous step
     with:
       flutter_channel: stable
       working_directory: ${{ matrix.project }}

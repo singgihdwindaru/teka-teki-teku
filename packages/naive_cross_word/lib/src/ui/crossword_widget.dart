@@ -19,14 +19,14 @@ class _CrosswordWidgetState extends State<CrosswordWidget> {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, rowIndex) {
         return SizedBox(
-          height: 30,
+          height: 25,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, colIndex) {
               return Container(
                 alignment: Alignment.centerLeft,
-                width: 30,
-                height: 30,
+                width: 25,
+                height: 25,
                 decoration: BoxDecoration(
                   color: widget.crossWordModel.layout.table[rowIndex][colIndex] == '-'
                       ? Colors.black
