@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cross_word` - `v0.1.1+4`](#cross_word---v0114)
+ - [`teka_teki_tiku` - `v1.4.4`](#teka_teki_tiku---v144)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `teka_teki_tiku` - `v1.4.4`
+
+---
+
+#### `cross_word` - `v0.1.1+4`
+
+ - **FIX**: comment.
+
+
 ## 2024-12-27
 
 ### Changes
