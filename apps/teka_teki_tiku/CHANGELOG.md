@@ -1,3 +1,8 @@
+## 1.6.0
+
+ - **FEAT**: make crossword playable (#8) (#9).
+ - **FEAT**: make the crossword playable.
+
 ## 1.5.0
 
  - **FEAT**: make the crossword playable.

@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-12-29
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cross_word` - `v0.1.3`](#cross_word---v013)
+ - [`kakiku_admin` - `v1.1.0`](#kakiku_admin---v110)
+ - [`naive_cross_word` - `v0.1.4`](#naive_cross_word---v014)
+ - [`teka_tecore` - `v0.1.1`](#teka_tecore---v011)
+ - [`teka_teki_tiku` - `v1.6.0`](#teka_teki_tiku---v160)
+ - [`teka_tekit` - `v0.1.1`](#teka_tekit---v011)
+
+---
+
+#### `cross_word` - `v0.1.3`
+
+ - **FEAT**: make crossword playable (#8) (#9).
+ - **FEAT**: make the crossword playable.
+
+#### `kakiku_admin` - `v1.1.0`
+
+ - **FEAT**: make crossword playable (#8) (#9).
+
+#### `naive_cross_word` - `v0.1.4`
+
+ - **FEAT**: make crossword playable (#8) (#9).
+ - **FEAT**: make the crossword playable.
+
+#### `teka_tecore` - `v0.1.1`
+
+ - **FEAT**: make crossword playable (#8) (#9).
+
+#### `teka_teki_tiku` - `v1.6.0`
+
+ - **FEAT**: make crossword playable (#8) (#9).
+ - **FEAT**: make the crossword playable.
+
+#### `teka_tekit` - `v0.1.1`
+
+ - **FEAT**: make crossword playable (#8) (#9).
+
+
 ## [1.1.0](https://github.com/andiasrafil/teka-teki-teku/compare/v1.0.0...v1.1.0) (2024-12-29)
 
 
