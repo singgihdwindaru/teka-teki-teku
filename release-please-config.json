@@ -3,13 +3,6 @@
   "include-v-in-tag": true,
   "tag-separator": "@",
   "packages": {
-    ".": {
-      "changelog-path": "CHANGELOG.md",
-      "bump-minor-pre-major": false,
-      "bump-patch-for-minor-pre-major": false,
-      "draft": false,
-      "prerelease": false
-    },
     "apps/teka_teki_tiku": {
       "changelog-path": "apps/teka_teki_tiku/CHANGELOG.md",
       "bump-minor-pre-major": false,
