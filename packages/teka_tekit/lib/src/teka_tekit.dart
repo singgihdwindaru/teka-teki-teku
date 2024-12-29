@@ -5,7 +5,7 @@ class TekaTekit {
   /// {@macro teka_tekit}
   const TekaTekit();
 }
-class TekaTekit2 {
+class TekaTekitTekut {
   /// {@macro teka_tekit}
-  const TekaTekit2();
+  const TekaTekitTekut();
 }
